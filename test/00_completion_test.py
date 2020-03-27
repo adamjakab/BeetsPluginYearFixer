@@ -1,7 +1,7 @@
 #  Copyright: Copyright (c) 2020., Adam Jakab
 #
 #  Author: Adam Jakab <adam at jakab dot pro>
-#  Created: 2/19/20, 12:36 PM
+#  Created: 2/19/20, 12:31 PM
 #  License: See LICENSE.txt
 
 from test.helper import TestHelper, Assertions, PLUGIN_NAME, PLUGIN_SHORT_DESCRIPTION, capture_log, capture_stdout

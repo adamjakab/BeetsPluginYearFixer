@@ -5,12 +5,18 @@
 #  License: See LICENSE.txt
 
 import logging
-
+from distutils.util import convert_path
 from urllib.parse import quote_plus
 
 from beets.library import Item
 
-__logger__ = logging.getLogger('beets.yearfixer')
+# Get values as: plg_ns['__PLUGIN_NAME__']
+plg_ns = {}
+about_path = convert_path('beetsplug/yearfixer/about.py')
+with open(about_path) as about_file:
+    exec(about_file.read(), plg_ns)
+
+__logger__ = logging.getLogger('beets.{plg}'.format(plg=plg_ns['__PLUGIN_NAME__']))
 
 MB_BASE = "https://musicbrainz.org/ws/2/"
 

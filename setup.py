@@ -14,18 +14,18 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
-main_ns = {}
-ver_path = convert_path('beetsplug/yearfixer/version.py')
-with open(ver_path) as ver_file:
-    exec(ver_file.read(), main_ns)
+plg_ns = {}
+about_path = convert_path('beetsplug/yearfixer/about.py')
+with open(about_path) as about_file:
+    exec(about_file.read(), plg_ns)
 
 # Setup
 setup(
-    name='beets-yearfixer',
-    version=main_ns['__version__'],
-    description='A beets plugin for fixing original_year and year tags',
-    author='Adam Jakab',
-    author_email='adam@jakab.pro',
+    name=plg_ns['__PACKAGE_NAME__'],
+    version=plg_ns['__version__'],
+    description=plg_ns['__PACKAGE_DESCRIPTION__'],
+    author=plg_ns['__author__'],
+    author_email=plg_ns['__email__'],
     url='https://github.com/adamjakab/BeetsPluginTemplate',
     license='MIT',
     long_description=README,
@@ -34,6 +34,7 @@ setup(
 
     include_package_data=True,
     test_suite='test',
+
     packages=['beetsplug.yearfixer'],
 
     python_requires='>=3.6',

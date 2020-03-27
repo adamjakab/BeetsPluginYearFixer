@@ -1,6 +1,6 @@
 prune test
 include LICENSE.txt
 include README.md
-include beetsplug/yearfixer/version.py
+include beetsplug/yearfixer/about.py
 include beetsplug/yearfixer/config_default.yml
 

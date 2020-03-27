@@ -15,10 +15,6 @@ from beets.util.confit import Subview
 
 from beetsplug.yearfixer import common
 
-# The plugin
-__PLUGIN_NAME__ = u'yearfixer'
-__PLUGIN_SHORT_DESCRIPTION__ = u'Fix original_year and year tags'
-
 
 class YearFixerCommand(Subcommand):
     config: Subview = None
@@ -26,10 +22,22 @@ class YearFixerCommand(Subcommand):
     query = None
     parser: OptionParser = None
 
+    cfg_force = False
+
     def __init__(self, cfg):
         self.config = cfg
 
-        self.parser = OptionParser(usage='beet yearfixer [options] [QUERY...]')
+        self.parser = OptionParser(usage='beet {plg} [options] [QUERY...]'.format(
+            plg=common.plg_ns['__PLUGIN_NAME__']
+        ))
+
+        self.parser.add_option(
+            '-f', '--force',
+            action='store_true', dest='force', default=self.cfg_force,
+            help=u'[default: {}] force analysis of items with non-zero bpm '
+                 u'values'.format(
+                self.cfg_force)
+        )
 
         self.parser.add_option(
             '-v', '--version',
@@ -40,13 +48,15 @@ class YearFixerCommand(Subcommand):
         # Keep this at the end
         super(YearFixerCommand, self).__init__(
             parser=self.parser,
-            name=__PLUGIN_NAME__,
-            help=__PLUGIN_SHORT_DESCRIPTION__
+            name=common.plg_ns['__PLUGIN_NAME__'],
+            aliases=[common.plg_ns['__PLUGIN_ALIAS__']] if common.plg_ns['__PLUGIN_ALIAS__'] else [],
+            help=common.plg_ns['__PLUGIN_SHORT_DESCRIPTION__']
         )
 
     def func(self, lib: Library, options, arguments):
         self.lib = lib
         self.query = decargs(arguments)
+        self.cfg_force = options.force
 
         if options.version:
             self.show_version_information()
@@ -67,12 +77,33 @@ class YearFixerCommand(Subcommand):
         year = item.get("year")
         original_year = item.get("original_year")
 
-        if not original_year:
+        if not original_year or self.cfg_force:
             mbdata = self._get_mb_data(item)
             if mbdata:
                 original_year = common.extract_original_year_from_mb_data(mbdata)
-                self._say("Got original year: {}".format(original_year), log_only=False)
-                setattr(item, "original_year", original_year)
+                self._say("Got `original_year`: {}".format(original_year))
+
+            if not original_year:
+                original_year = self.get_mean_value_for_album(item, "original_year")
+                self._say("Got (mean-album) `original_year`: {}".format(original_year))
+
+            if not original_year:
+                original_year = self.get_mean_value_for_artist(item, "original_year")
+                self._say("Got (mean-artist) `original_year`: {}".format(original_year))
+
+        if not year or self.cfg_force:
+            year = self.get_mean_value_for_album(item, "year")
+            self._say("Got (mean-album) `year`: {}".format(year))
+
+            if not year:
+                year = self.get_mean_value_for_artist(item, "year")
+                self._say("Got (mean-artist) `year`: {}".format(year))
+
+        if original_year:
+            setattr(item, "original_year", original_year)
+
+        if year:
+            setattr(item, "year", year)
 
         if original_year and not year:
             setattr(item, "year", original_year)
@@ -81,7 +112,41 @@ class YearFixerCommand(Subcommand):
             setattr(item, "original_year", year)
 
         if not year and not original_year:
-            self._say("Cannot find year info")
+            self._say("Cannot find info!")
+
+    def get_mean_value_for_album(self, item: Item, field_name):
+        answer = None
+
+        query = MatchQuery('mb_albumid', item.get("mb_albumid"))
+        items = self.lib.items(query)
+        values = []
+        for it in items:
+            if it.get(field_name):
+                val = int(it.get(field_name))
+                if 0 < val < 2100:
+                    values.append(val)
+
+        if values:
+            answer = int(round(sum(values) / len(values)))
+
+        return answer
+
+    def get_mean_value_for_artist(self, item: Item, field_name):
+        answer = None
+
+        query = MatchQuery('mb_artistid', item.get("mb_artistid"))
+        items = self.lib.items(query)
+        values = []
+        for it in items:
+            if it.get(field_name):
+                val = int(it.get(field_name))
+                if 0 < val < 2100:
+                    values.append(val)
+
+        if values:
+            answer = int(round(sum(values) / len(values)))
+
+        return answer
 
     def _get_mb_data(self, item: Item):
         data = {}
@@ -94,9 +159,12 @@ class YearFixerCommand(Subcommand):
 
         self._say(u'fetching URL: {}'.format(url))
 
-        # todo: use about.py for values
         headers = {
-            'User-Agent': 'BeetsPluginYearFixer/0.0.1 ( https://github.com/adamjakab/BeetsPluginYearFixer )',
+            'User-Agent': '{pt}/{ver} ( {url} )'.format(
+                pt=common.plg_ns['__PACKAGE_TITLE__'],
+                ver=common.plg_ns['__version__'],
+                url=common.plg_ns['__PACKAGE_URL__'],
+            ),
         }
 
         max_retries = 5
@@ -138,23 +206,30 @@ class YearFixerCommand(Subcommand):
         cmd_query = self.query
         parsed_cmd_query, parsed_ordering = parse_query_parts(cmd_query, Item)
 
-        parsed_plg_query = OrQuery([
-            NumericQuery('year', '0'),
-            MatchQuery('year', ''),
-            NoneQuery('year'),
-            NumericQuery('original_year', '0'),
-            MatchQuery('original_year', ''),
-            NoneQuery('original_year'),
-        ])
+        if self.cfg_force:
+            full_query = parsed_cmd_query
+        else:
+            parsed_plg_query = OrQuery([
+                NumericQuery('year', '0'),
+                MatchQuery('year', ''),
+                NoneQuery('year'),
+                NumericQuery('original_year', '0'),
+                MatchQuery('original_year', ''),
+                NoneQuery('original_year'),
+            ])
+            full_query = AndQuery([parsed_cmd_query, parsed_plg_query])
 
-        full_query = AndQuery([parsed_cmd_query, parsed_plg_query])
         self._say("Selection query: {}".format(full_query))
 
         return self.lib.items(full_query, parsed_ordering)
 
     def show_version_information(self):
-        from beetsplug.yearfixer.version import __version__
-        self._say("Plot(beets-{}) plugin for Beets: v{}".format(__PLUGIN_NAME__, __version__))
+        self._say("{pt}({pn}) plugin for Beets: v{ver}".format(
+            pt=common.plg_ns['__PACKAGE_TITLE__'],
+            pn=common.plg_ns['__PACKAGE_NAME__'],
+            ver=common.plg_ns['__version__']
+        ), log_only=False)
 
-    def _say(self, msg, log_only=True, is_error=False):
+    @staticmethod
+    def _say(msg, log_only=True, is_error=False):
         common.say(msg, log_only, is_error)

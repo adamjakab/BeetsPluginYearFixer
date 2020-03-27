@@ -3,19 +3,14 @@
 #  Author: Adam Jakab <adam at jakab dot pro>
 #  Created: 3/27/20, 3:52 PM
 #  License: See LICENSE.txt
-#
-#  Author: Adam Jakab <adam at jakab dot pro>
-#  Created: 3/27/20, 9:48 AM
-#  License: See LICENSE.txt
 
 import logging
-import sys
-
-__logger__ = logging.getLogger('beets.yearfixer')
 
 from urllib.parse import quote_plus
 
 from beets.library import Item
+
+__logger__ = logging.getLogger('beets.yearfixer')
 
 MB_BASE = "https://musicbrainz.org/ws/2/"
 

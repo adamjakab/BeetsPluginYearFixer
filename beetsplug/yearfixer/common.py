@@ -5,6 +5,7 @@
 #  License: See LICENSE.txt
 
 import logging
+import os
 from distutils.util import convert_path
 from urllib.parse import quote_plus
 
@@ -12,7 +13,7 @@ from beets.library import Item
 
 # Get values as: plg_ns['__PLUGIN_NAME__']
 plg_ns = {}
-about_path = convert_path('beetsplug/yearfixer/about.py')
+about_path = os.path.join(os.path.dirname(__file__), u'about.py')
 with open(about_path) as about_file:
     exec(about_file.read(), plg_ns)
 

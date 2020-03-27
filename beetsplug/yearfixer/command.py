@@ -66,6 +66,10 @@ class YearFixerCommand(Subcommand):
 
     def handle_main_task(self):
         items = self.retrieve_library_items()
+        if not items:
+            self._say("Your query did not produce any results.", log_only=False)
+            return
+
         for item in items:
             self.process_item(item)
             item.try_write()

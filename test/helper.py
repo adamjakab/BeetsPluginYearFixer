@@ -39,6 +39,9 @@ logging.getLogger('beets').propagate = True
 # Values
 PLUGIN_NAME = common.plg_ns['__PLUGIN_NAME__']
 PLUGIN_SHORT_DESCRIPTION = common.plg_ns['__PLUGIN_SHORT_DESCRIPTION__']
+PLUGIN_VERSION = common.plg_ns['__version__']
+PACKAGE_NAME = common.plg_ns['__PACKAGE_NAME__']
+PACKAGE_TITLE = common.plg_ns['__PACKAGE_TITLE__']
 
 
 class LogCapture(logging.Handler):
@@ -52,13 +55,10 @@ class LogCapture(logging.Handler):
 
 
 @contextmanager
-def capture_log(logger='beets', suppress_output=True):
+def capture_log(logger='beets'):
     capture = LogCapture()
     log = logging.getLogger(logger)
     log.propagate = True
-    if suppress_output:
-        # Is this too violent?
-        log.handlers = []
     log.addHandler(capture)
     try:
         yield capture.messages

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/adamjakab/BeetsPluginYearFixer.svg?branch=master)](https://travis-ci.com/adamjakab/BeetsPluginYearFixer)
+[![Build Status](https://travis-ci.org/adamjakab/BeetsPluginYearFixer.svg?branch=master)](https://travis-ci.org/adamjakab/BeetsPluginYearFixer)
 [![Coverage Status](https://coveralls.io/repos/github/adamjakab/BeetsPluginYearFixer/badge.svg?branch=master)](https://coveralls.io/github/adamjakab/BeetsPluginYearFixer?branch=master)
 [![PyPi](https://img.shields.io/pypi/v/beets-yearfixer.svg)](https://pypi.org/project/beets-yearfixer/)
 

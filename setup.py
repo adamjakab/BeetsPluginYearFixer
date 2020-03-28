@@ -26,7 +26,7 @@ setup(
     description=plg_ns['__PACKAGE_DESCRIPTION__'],
     author=plg_ns['__author__'],
     author_email=plg_ns['__email__'],
-    url='https://github.com/adamjakab/BeetsPluginTemplate',
+    url=plg_ns['__PACKAGE_URL__'],
     license='MIT',
     long_description=README,
     long_description_content_type='text/markdown',

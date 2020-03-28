@@ -6,7 +6,7 @@
 
 __author__ = u'Adam Jakab'
 __email__ = u'adam@jakab.pro'
-__copyright__ = u'Copyright (c) 2018-2020, {} <{}>'.format(__author__, __email__)
+__copyright__ = u'Copyright (c) 2020, {} <{}>'.format(__author__, __email__)
 __license__ = u'License :: OSI Approved :: MIT License'
 __version__ = u'0.0.1'
 __status__ = u'Kickstarted'
@@ -17,4 +17,4 @@ __PACKAGE_DESCRIPTION__ = u'A beets plugin for fixing `original_year` and `year`
 __PACKAGE_URL__ = u'https://github.com/adamjakab/BeetsPluginYearFixer'
 __PLUGIN_NAME__ = u'yearfixer'
 __PLUGIN_ALIAS__ = None
-__PLUGIN_SHORT_DESCRIPTION__ = u'Fix `original_year` and `year` tags on library items'
+__PLUGIN_SHORT_DESCRIPTION__ = u'fix `original_year` and `year` tags on library items'

@@ -6,7 +6,6 @@
 
 import logging
 import os
-from distutils.util import convert_path
 from urllib.parse import quote_plus
 
 from beets.library import Item
@@ -20,16 +19,6 @@ with open(about_path) as about_file:
 __logger__ = logging.getLogger('beets.{plg}'.format(plg=plg_ns['__PLUGIN_NAME__']))
 
 MB_BASE = "https://musicbrainz.org/ws/2/"
-
-
-def say(msg, log_only=True, is_error=False):
-    """Log and write to stdout
-    """
-    _level = logging.DEBUG
-    _level = _level if log_only else logging.INFO
-    _level = _level if not is_error else logging.ERROR
-
-    __logger__.log(level=_level, msg=msg)
 
 
 def get_mb_search_url(item: Item):
@@ -63,3 +52,10 @@ def extract_original_year_from_mb_data(data):
                         answer = rel_year if not answer or rel_year < answer else answer
 
     return answer
+
+
+def say(msg, log_only=True, is_error=False):
+    _level = logging.DEBUG
+    _level = _level if log_only else logging.INFO
+    _level = _level if not is_error else logging.ERROR
+    __logger__.log(level=_level, msg=msg)

@@ -5,7 +5,7 @@
 
 # YearFixer (Beets Plugin)
 
-The *beets-yearfixer* plugin finds the original_year for each of your songs by querying the MB database and finding the first release date that is associated with a specific recording.
+The *beets-yearfixer* plugin finds the `original_year` for each of your songs by querying the MB database and finding the first release date that is associated with a specific recording.
 
 
 ## Installation

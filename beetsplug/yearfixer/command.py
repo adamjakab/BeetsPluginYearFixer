@@ -76,7 +76,7 @@ class YearFixerCommand(Subcommand):
             item.store()
 
     def process_item(self, item: Item):
-        self._say("Finding year for: {}".format(item), log_only=False)
+        self._say("Finding year for: {}".format(item), log_only=True)
 
         year = item.get("year")
         original_year = item.get("original_year")

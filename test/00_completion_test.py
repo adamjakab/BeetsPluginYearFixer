@@ -8,10 +8,11 @@ from test.helper import TestHelper, Assertions, \
     PLUGIN_NAME, PLUGIN_SHORT_DESCRIPTION, PACKAGE_NAME, PACKAGE_TITLE, PLUGIN_VERSION, \
     capture_log
 
+plg_log_ns = 'beets.{}'.format(PLUGIN_NAME)
+
 
 class CompletionTest(TestHelper, Assertions):
-    """Test invocation of ``beet goingrunning`` with this plugin.
-    Only ensures that command does not fail.
+    """Test invocation of the plugin.
     """
 
     def test_application(self):
@@ -23,13 +24,13 @@ class CompletionTest(TestHelper, Assertions):
         output = self.runcli("version")
         self.assertIn("plugins: {0}".format(PLUGIN_NAME), output)
 
-    def test_plugin(self):
-        with capture_log('beets.yearfixer') as logs:
+    def test_run_plugin(self):
+        with capture_log(plg_log_ns) as logs:
             self.runcli(PLUGIN_NAME)
         self.assertIn("Your query did not produce any results.", "\n".join(logs))
 
     def test_plugin_version(self):
-        with capture_log('beets.yearfixer') as logs:
+        with capture_log(plg_log_ns) as logs:
             self.runcli(PLUGIN_NAME, "--version")
 
         versioninfo = "{pt}({pn}) plugin for Beets: v{ver}".format(

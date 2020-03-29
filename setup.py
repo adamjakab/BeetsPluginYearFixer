@@ -5,8 +5,9 @@
 #  License: See LICENSE.txt
 
 import pathlib
-from setuptools import setup
 from distutils.util import convert_path
+
+from setuptools import setup
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -59,6 +60,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Environment :: Console',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )

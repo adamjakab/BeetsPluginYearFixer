@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/adamjakab/BeetsPluginYearFixer.svg?branch=devel)](https://travis-ci.org/adamjakab/BeetsPluginYearFixer)
-[![Coverage Status](https://coveralls.io/repos/github/adamjakab/BeetsPluginYearFixer/badge.svg?branch=devel)](https://coveralls.io/github/adamjakab/BeetsPluginYearFixer?branch=devel)
+[![Build Status](https://travis-ci.org/adamjakab/BeetsPluginYearFixer.svg?branch=master)](https://travis-ci.org/adamjakab/BeetsPluginYearFixer)
+[![Coverage Status](https://coveralls.io/repos/github/adamjakab/BeetsPluginYearFixer/badge.svg?branch=master)](https://coveralls.io/github/adamjakab/BeetsPluginYearFixer?branch=master)
 [![PyPi](https://img.shields.io/pypi/v/beets-yearfixer.svg)](https://pypi.org/project/beets-yearfixer/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/beets-yearfixer.svg)](https://pypi.org/project/beets-yearfixer/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)

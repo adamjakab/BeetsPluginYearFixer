@@ -8,11 +8,11 @@ import time
 from optparse import OptionParser
 
 import requests
-from beets.dbcore.query import NumericQuery, MatchQuery, AndQuery, OrQuery, NoneQuery
+from beets.dbcore.query import NumericQuery, MatchQuery, AndQuery, OrQuery, \
+    NoneQuery
 from beets.library import Library, Item, parse_query_parts
 from beets.ui import Subcommand, decargs
 from beets.util.confit import Subview
-
 from beetsplug.yearfixer import common
 
 
@@ -76,7 +76,7 @@ class YearFixerCommand(Subcommand):
             item.store()
 
     def process_item(self, item: Item):
-        self._say("Finding year for: {}".format(item), log_only=True)
+        self._say("Fixing item: {}".format(item), log_only=True)
 
         year = item.get("year")
         original_year = item.get("original_year")
@@ -84,8 +84,11 @@ class YearFixerCommand(Subcommand):
         if not original_year or self.cfg_force:
             mbdata = self._get_mb_data(item)
             if mbdata:
-                original_year = common.extract_original_year_from_mb_data(mbdata)
-                self._say("Got `original_year`: {}".format(original_year))
+                extracted = common.extract_original_year_from_mb_data(mbdata)
+                if extracted:
+                    original_year = extracted
+                    self._say("Got (MusicBrainz) recording `original_year`: {}"
+                              .format(original_year))
 
             if not original_year:
                 original_year = self.get_mean_value_for_album(item, "original_year")
@@ -161,7 +164,7 @@ class YearFixerCommand(Subcommand):
             self._say(err, is_error=True)
             return data
 
-        self._say(u'fetching URL: {}'.format(url))
+        # self._say(u'fetching URL: {}'.format(url))
 
         headers = {
             'User-Agent': '{pt}/{ver} ( {url} )'.format(
@@ -177,7 +180,7 @@ class YearFixerCommand(Subcommand):
 
         while not data:
             retries += 1
-            self._say('Retry #{}'.format(retries))
+            # self._say('Retry #{}'.format(retries))
             if retries > max_retries:
                 self._say("Maximum({}) retries reached. Abandoning.".format(max_retries), is_error=True)
                 break
@@ -189,8 +192,10 @@ class YearFixerCommand(Subcommand):
                 break
 
             if res.status_code == 503:
-                # we hit the query limit - https://musicbrainz.org/doc/XML_Web_Service/Rate_Limiting
-                self._say('Query LIMIT Hit!')
+                # we hit the query limit -
+                # https://musicbrainz.org/doc/XML_Web_Service/Rate_Limiting
+                self._say('Retry #{} - Query LIMIT Hit! sleeping {}s.'
+                          .format(retries, sleep_time))
                 time.sleep(sleep_time)
                 continue
 

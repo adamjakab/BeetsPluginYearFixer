@@ -12,7 +12,7 @@ from beets.dbcore.query import NumericQuery, MatchQuery, AndQuery, OrQuery, \
     NoneQuery
 from beets.library import Library, Item, parse_query_parts
 from beets.ui import Subcommand, decargs
-from beets.util.confit import Subview
+from confuse import Subview
 from beetsplug.yearfixer import common
 
 

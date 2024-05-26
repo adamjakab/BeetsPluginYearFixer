@@ -38,7 +38,7 @@ setup(
 
     packages=['beetsplug.yearfixer'],
 
-    python_requires='>=3.6',
+    python_requires='>=3.8',
 
     install_requires=[
         'beets>=1.4.9',
@@ -60,8 +60,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Environment :: Console',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
 )

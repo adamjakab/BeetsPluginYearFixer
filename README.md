@@ -12,7 +12,9 @@ The _beets-yearfixer_ plugin finds the `original_year` for each of your songs by
 
 The plugin can be installed via:
 
-    $pip install beets-yearfixer
+```bash
+  pip install beets-yearfixer
+```
 
 Activate the plugin in your configuration file by adding `yearfixer` to the plugins section:
 

@@ -8,8 +8,7 @@ import time
 from optparse import OptionParser
 
 import requests
-from beets.dbcore.query import NumericQuery, MatchQuery, AndQuery, OrQuery, \
-    NoneQuery
+from beets.dbcore.query import NumericQuery, MatchQuery, AndQuery, OrQuery, NoneQuery
 from beets.library import Library, Item, parse_query_parts
 from beets.ui import Subcommand, decargs
 from confuse import Subview
@@ -34,9 +33,7 @@ class YearFixerCommand(Subcommand):
         self.parser.add_option(
             '-f', '--force',
             action='store_true', dest='force', default=self.cfg_force,
-            help=u'[default: {}] force analysis of items with non-zero bpm '
-                 u'values'.format(
-                self.cfg_force)
+            help=u'[default: {}] force analysis of items with non-zero original_year values'.format(self.cfg_force)
         )
 
         self.parser.add_option(
